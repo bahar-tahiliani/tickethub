@@ -21,18 +21,17 @@ client.interceptors.request.use(
 
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
 client.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+  (response) => response,
   (error) => {
+    console.error('API Error:', error);
+
     const message =
       error.response?.data?.message ||
+      error.message ||
       'Something went wrong. Please try again.';
 
     return Promise.reject(new Error(message));
