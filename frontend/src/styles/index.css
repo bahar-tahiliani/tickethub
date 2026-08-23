@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  @apply bg-ink text-white font-body;
+  background-image: radial-gradient(circle at 20% 0%, rgba(244, 183, 64, 0.08), transparent 40%),
+    radial-gradient(circle at 80% 20%, rgba(232, 72, 62, 0.06), transparent 35%);
+}
+
+@layer components {
+  /* The "ticket stub" signature element: a perforated divider with punched
+     notches, used on the confirmation ticket and seat legend. */
+  .ticket-stub {
+    position: relative;
+    background: theme('colors.paper');
+    color: theme('colors.ink');
+    border-radius: 16px;
+  }
+  .ticket-stub::before,
+  .ticket-stub::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 24px;
+    height: 24px;
+    background: theme('colors.ink');
+    border-radius: 9999px;
+    transform: translateY(-50%);
+  }
+  .ticket-stub::before { left: -12px; }
+  .ticket-stub::after { right: -12px; }
+
+  .ticket-perforation {
+    border-top: 2px dashed rgba(21, 17, 31, 0.25);
+  }
+
+  .btn-primary {
+    @apply bg-marquee text-ink font-semibold px-5 py-2.5 rounded-lg transition hover:bg-marqueedim disabled:opacity-40 disabled:cursor-not-allowed;
+  }
+  .btn-secondary {
+    @apply bg-surface2 text-white font-semibold px-5 py-2.5 rounded-lg border border-white/10 transition hover:border-marquee/60 disabled:opacity-40 disabled:cursor-not-allowed;
+  }
+  .btn-danger {
+    @apply bg-crimson/90 text-white font-semibold px-5 py-2.5 rounded-lg transition hover:bg-crimson disabled:opacity-40;
+  }
+  .card {
+    @apply bg-surface border border-white/5 rounded-2xl;
+  }
+  .input {
+    @apply w-full bg-surface2 border border-white/10 rounded-lg px-3 py-2.5 text-white placeholder-muted/70 focus:outline-none focus:border-marquee/70 transition;
+  }
+  .label {
+    @apply text-xs uppercase tracking-wider text-muted mb-1.5 block;
+  }
+}
