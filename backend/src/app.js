@@ -27,7 +27,7 @@ app.use(express.json());
 app.get('/', (req, res) => {
   res.json({
     success: true,
-    message: 'TicketHub API is running!'
+    message: 'TicketHub API is running!',
     health: '/api/health'
   });
 });
@@ -50,8 +50,10 @@ app.use('/api/venues', venueRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/tickets', ticketRoutes);
 
-// Error handling
+// 404 handler - MUST come after all routes
 app.use(notFoundHandler);
+
+// Error handling
 app.use(errorHandler);
 
 module.exports = app;
