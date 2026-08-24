@@ -15,18 +15,72 @@ const ticketRoutes = require('./routes/ticketRoutes');
 
 const app = express();
 
-// CORS
-app.use(
-  cors({
-    origin: true,
-    credentials: true
-  })
-);
+// ===============================
+// CORS CONFIGURATION
+// ===============================
 
-// JSON body parser
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'https://tickethub-oqvysnafg-bahartahiliani2005-4077s-projects.vercel.app',
+  'https://tickethub-ivory.vercel.app'
+];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+
+    // Allow requests without an origin
+    // (Postman, Railway health checks, etc.)
+    if (!origin) {
+      return callback(null, true);
+    }
+
+    // Allow known origins
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    // Allow all Vercel preview deployments
+    if (origin.endsWith('.vercel.app')) {
+      return callback(null, true);
+    }
+
+    // Allow localhost during development
+    if (
+      origin.startsWith('http://localhost:') ||
+      origin.startsWith('http://127.0.0.1:')
+    ) {
+      return callback(null, true);
+    }
+
+    return callback(new Error('Not allowed by CORS'));
+  },
+
+  credentials: true,
+
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+
+  allowedHeaders: [
+    'Origin',
+    'X-Requested-With',
+    'Content-Type',
+    'Accept',
+    'Authorization'
+  ]
+};
+
+app.use(cors(corsOptions));
+
+// ===============================
+// BODY PARSER
+// ===============================
+
 app.use(express.json());
 
-// Root route
+// ===============================
+// ROOT ROUTE
+// ===============================
+
 app.get('/', (req, res) => {
   res.json({
     success: true,
@@ -35,7 +89,10 @@ app.get('/', (req, res) => {
   });
 });
 
-// Health check
+// ===============================
+// HEALTH CHECK
+// ===============================
+
 app.get('/api/health', (req, res) => {
   res.json({
     success: true,
@@ -43,7 +100,10 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// API routes
+// ===============================
+// API ROUTES
+// ===============================
+
 app.use('/api/auth', authRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/seats', seatRoutes);
@@ -53,10 +113,11 @@ app.use('/api/venues', venueRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/tickets', ticketRoutes);
 
-// 404 handler MUST be after all routes
-app.use(notFoundHandler);
+// ===============================
+// ERROR HANDLING
+// ===============================
 
-// Error handler MUST be last
+app.use(notFoundHandler);
 app.use(errorHandler);
 
 module.exports = app;
