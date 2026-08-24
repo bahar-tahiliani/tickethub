@@ -70,6 +70,7 @@ export default function Checkout() {
       state: {
         eventId,
         hold,
+        event,
         total
       }
     });
