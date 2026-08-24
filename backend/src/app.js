@@ -28,6 +28,7 @@ app.get('/', (req, res) => {
   res.json({
     success: true,
     message: 'TicketHub API is running!'
+    health: '/api/health'
   });
 });
 
