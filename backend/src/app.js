@@ -19,58 +19,25 @@ const app = express();
 // CORS CONFIGURATION
 // ===============================
 
-const allowedOrigins = [
-  'http://localhost:5173',
-  'http://localhost:3000',
-  'https://tickethub-oqvysnafg-bahartahiliani2005-4077s-projects.vercel.app',
-  'https://tickethub-ivory.vercel.app'
-];
+// ===============================
+// CORS CONFIGURATION
+// ===============================
 
 const corsOptions = {
-  origin: function (origin, callback) {
-
-    // Allow requests without an origin
-    // (Postman, Railway health checks, etc.)
-    if (!origin) {
-      return callback(null, true);
-    }
-
-    // Allow known origins
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    }
-
-    // Allow all Vercel preview deployments
-    if (origin.endsWith('.vercel.app')) {
-      return callback(null, true);
-    }
-
-    // Allow localhost during development
-    if (
-      origin.startsWith('http://localhost:') ||
-      origin.startsWith('http://127.0.0.1:')
-    ) {
-      return callback(null, true);
-    }
-
-    return callback(new Error('Not allowed by CORS'));
-  },
-
+  origin: true,
   credentials: true,
-
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-
   allowedHeaders: [
-    'Origin',
-    'X-Requested-With',
     'Content-Type',
-    'Accept',
-    'Authorization'
+    'Authorization',
+    'Accept'
   ]
 };
 
 app.use(cors(corsOptions));
 
+// Handle preflight requests
+app.options('*', cors(corsOptions));
 // ===============================
 // BODY PARSER
 // ===============================
